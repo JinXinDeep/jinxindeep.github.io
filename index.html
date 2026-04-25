@@ -2,15 +2,698 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>我的个人主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金鑫博士 | 华为云盘古多模态大模型首席架构师</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-        h1 { color: #333; }
+        :root {
+            --primary: #c41230;
+            --primary-dark: #9a0e26;
+            --secondary: #2c3e50;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+        }
+        
+        /* Header / Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--secondary) 0%, #1a252f 100%);
+            color: white;
+            padding: 80px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></svg>');
+            background-size: 60px 60px;
+            opacity: 0.5;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.3em;
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .hero .affiliation {
+            font-size: 1em;
+            color: #bdc3c7;
+            margin-bottom: 30px;
+        }
+        
+        .hero .contact {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            font-size: 0.95em;
+        }
+        
+        .hero .contact span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #bdc3c7;
+            margin-top: 5px;
+        }
+        
+        /* Navigation */
+        nav {
+            background: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 15px 20px;
+            gap: 35px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* Sections */
+        section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        h2 {
+            font-size: 1.8em;
+            color: var(--secondary);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+        }
+        
+        /* About */
+        .about-content {
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(to right, #fff5f5, #ffffff);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 30px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .timeline-date {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        
+        .timeline-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .timeline-role {
+            color: var(--text-light);
+            font-size: 0.95em;
+            margin-bottom: 15px;
+        }
+        
+        .timeline-desc {
+            color: var(--text-light);
+            font-size: 0.95em;
+        }
+        
+        .timeline-desc ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .timeline-desc li {
+            margin-bottom: 6px;
+        }
+        
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #eee;
+        }
+        
+        .project-content {
+            padding: 20px;
+        }
+        
+        .project-tag {
+            display: inline-block;
+            background: #fee2e2;
+            color: var(--primary);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .project-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .project-desc {
+            font-size: 0.92em;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        /* Publications */
+        .pub-list {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .pub-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .pub-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .pub-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        
+        .pub-text h3 {
+            font-size: 1.1em;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        
+        .pub-text p {
+            color: var(--text-light);
+            font-size: 0.9em;
+        }
+        
+        /* Awards */
+        .awards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .award-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .award-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .award-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        
+        .award-desc {
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            color: #bdc3c7;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+        
+        footer a {
+            color: #ecf0f1;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2em; }
+            .hero .subtitle { font-size: 1.1em; }
+            .stats-bar { gap: 30px; }
+            .stat-number { font-size: 1.8em; }
+            section { padding: 40px 15px; }
+            .timeline { padding-left: 20px; }
+            .timeline-item::before { left: -26px; }
+        }
     </style>
 </head>
 <body>
-    <h1>你好，我是 XXX</h1>
-    <p>这是我的 GitHub 个人主页。</p>
-    <p>联系我：your-email@example.com</p>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>金鑫博士</h1>
+            <p class="subtitle">华为云视频生成大模型、世界模型    团队主管</p>
+            <p class="affiliation">
+                中国科学院计算技术研究所 博士 | 华为技术有限公司 2012实验室 / 华为云<br>
+                华为云盘古多模态大模型首席架构师 · 华为技术专家A
+            </p>
+            <div class="contact">
+                <span>📧 sdjinxin@gmail.com</span>
+                <span>🏢 华为云</span>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">顶会/顶刊论文</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">60+</div>
+                    <div class="stat-label">专利申请</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">美国授权专利</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10年+</div>
+                    <div class="stat-label">华为工作经历</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#about">关于我</a></li>
+            <li><a href="#research">研究方向</a></li>
+            <li><a href="#projects">重点项目</a></li>
+            <li><a href="#experience">工作经历</a></li>
+            <li><a href="#publications">论文专利</a></li>
+            <li><a href="#awards">荣誉奖项</a></li>
+        </ul>
+    </nav>
+
+    <!-- About -->
+    <section id="about">
+        <h2>关于我</h2>
+        <div class="about-content">
+            <p>
+                我是金鑫博士，2015年毕业于中国科学院计算技术研究所（计算机软件与理论方向），同年加入华为技术有限公司，先后任职于2012实验室与华为云。
+            </p>
+            <p style="margin-top: 15px;">
+                目前专注于<strong>大模型、人工智能与云计算</strong>领域，负责<strong>华为盘古视频生成基础模型、自动驾驶世界模型、具身世界模型、3D大模型</strong>、AR/VR、视频分析、OCR、机器学习平台、机器翻译等多个系统和服务。
+            </p>
+            <p style="margin-top: 15px;">
+                担任华为集团级大模型项目"4野15纵"视频生成技术负责人、华为集团级天水计划-AIGC视频创意生成项目经理。技术成果于2023、2024、2025连续三年由华为云CEO在HDC/HC大会Keynote重磅发布。
+            </p>
+            <div class="highlight-box">
+                <strong>核心专长：</strong>多模态大模型架构设计 · 视频生成与世界模型 · 3D/4D空间智能 · 自动驾驶仿真 · 具身智能数据合成 · 机器人· 视觉与AR算法
+            </div>
+        </div>
+    </section>
+
+    <!-- Research -->
+    <section id="research">
+        <h2>研究方向</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-tag">视频生成</span>
+                    <div class="project-title">盘古视频生成基础模型</div>
+                    <div class="project-desc">
+                        文生/图生视频、首帧生视频、首尾帧生视频、LoRA特效、视频编辑与续写。25年7月SuperCLUE国内第四，多项指标达到业界SOTA水平。突破万兴等X千万级/年客户。
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-tag">自动驾驶</span>
+                    <div class="project-title">自动驾驶世界模型</div>
+                    <div class="project-desc">
+                        视频生成、3D激光雷达点云生成、4D世界模型与闭环仿真、CODA榜单第一名。支撑广汽等X千万级客户，获数字中国峰会创新大赛二等奖。
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-tag">具身智能</span>
+                    <div class="project-title">具身世界模型、VLA、WAM</div>
+                    <div class="project-desc">
+                        动作控制图生视频、交互式视频渲染、端到端闭环仿真。构建6条具身数据合成管线。
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-tag">4D空间智能</span>
+                    <div class="project-title">4D世界模型与3D重建</div>
+                    <div class="project-desc">
+                        新视角视频生成、3D空间生成与实时漫游、3DGS重建。支持6DoF视角控制，PSNR>28，用于虚拟拍摄与具身场景复刻。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Projects with Images -->
+    <section id="projects">
+        <h2>重点项目与发布</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <img src="./images/hdc-booth.jpg" alt="HDC 2025 盘古展台" class="project-image">
+                <div class="project-content">
+                    <span class="project-tag">HDC 2025</span>
+                    <div class="project-title">盘古 for 汽车 · 世界模型全链路仿真体系</div>
+                    <div class="project-desc">
+                        在华为开发者大会2025展示盘古世界模型全链路一体化仿真体系，构筑智驾研发的"安全阀"和"加速器"。
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="./images/hdc-speaker.jpg" alt="HDC 2025 演讲" class="project-image">
+                <div class="project-content">
+                    <span class="project-tag">HDC 2025 技术解读</span>
+                    <div class="project-title">如何用世界模型重构物理世界</div>
+                    <div class="project-desc">
+                        基于对世界的理解和预测演化出AI世界模型。多模态理解和生成是世界模型的基础，模态从1D语言演进到4D动态世界。
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="./images/hdc-trend.jpg" alt="世界模型趋势" class="project-image">
+                <div class="project-content">
+                    <span class="project-tag">HDC演讲 技术演进</span>
+                    <div class="project-title">世界模型是全模态大模型发展的未来趋势</div>
+                    <div class="project-desc">
+                        大模型技术演进路径：走向全模态、多任务支持、长CoT、机理+AI。物理世界的业务需求驱动自动驾驶与具身智能的数据合成和闭环仿真、WAM。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience">
+        <h2>工作经历</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <span class="timeline-title">华为云 · 历任大模型、3D、视觉算法团队主管</span>
+                    <span class="timeline-date">2017.05 - 至今</span>
+                </div>
+                <div class="timeline-role">华为技术专家A | 盘古多模态大模型首席架构师 | 视频生成与世界模型团队主管</div>
+                <div class="timeline-desc">
+                    <ul>
+                        <li>负责华为云盘古视频生成基础模型、自动驾驶世界模型、具身世界模型、4D世界模型、3D大模型、AR/VR等业务</li>
+                        <li>带领国内几十人、海外几十人团队，突破万兴、广汽、爱奇艺、国铁集团TFDS、德邦暴力分拣识别等千万级客户</li>
+                        <li>连续三年HDC/HC大会Keynote技术发布</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <span class="timeline-title">华为2012实验室 · 高级算法工程师</span>
+                    <span class="timeline-date">2015.07 - 2017.05</span>
+                </div>
+                <div class="timeline-role">机器翻译、终端智能搜索、大数据并行分析</div>
+                <div class="timeline-desc">
+                    <ul>
+                        <li>机器翻译：基于TensorFlow优化RNN翻译模型，BLEU提升21%，速度提升一倍</li>
+                        <li>终端相册智能搜索：设计自然语言查询理解与图像语义搜索系统</li>
+                        <li>大数据并行分析：实现DBSCAN、FA等算法Spark分布式并行，加速比>0.7</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <span class="timeline-title">中国科学院计算技术研究所</span>
+                    <span class="timeline-date">博士 · 2015.07毕业</span>
+                </div>
+                <div class="timeline-role">计算机软件与理论</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications -->
+    <section id="publications">
+        <h2>论文与专利</h2>
+        <div class="pub-list">
+            <div class="pub-item">
+                <div class="pub-icon">📄</div>
+                <div class="pub-text">
+                    <h3>学术论文</h3>
+                    <p>在 IEEE Transactions、ICLR、CVPR、AAAI、IROS、ICDM、CIKM 等顶级期刊和国际会议发表论文 <strong>20篇</strong>，涵盖多模态大模型、计算机视觉、机器人与智能系统等领域。</p>
+                </div>
+            </div>
+            <div class="pub-item">
+                <div class="pub-icon">🔒</div>
+                <div class="pub-text">
+                    <h3>发明专利</h3>
+                    <p>申请美国、欧洲、中国专利 <strong>60+项</strong>，其中已授权美国专利 <strong>8项</strong>。涉及视频生成、世界模型、3D重建、OCR、视觉搜索等核心技术。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards -->
+    <section id="awards">
+        <h2>荣誉奖项</h2>
+        <div class="awards-grid">
+            <div class="award-card">
+                <div class="award-icon">🏆</div>
+                <div class="award-title">总裁嘉奖令</div>
+                <div class="award-desc">多次获得华为公司总裁嘉奖令</div>
+            </div>
+            <div class="award-card">
+                <div class="award-icon">🎖️</div>
+                <div class="award-title">战时英雄连</div>
+                <div class="award-desc">华为政企业务部战时英雄连（2021）</div>
+            </div>
+            <div class="award-card">
+                <div class="award-icon">🏅</div>
+                <div class="award-title">战略贡献奖</div>
+                <div class="award-desc">华为中国区战略目标奖</div>
+            </div>
+            <div class="award-card">
+                <div class="award-icon">🎯</div>
+                <div class="award-title">华为产品与解决方案竞争力奖</div>
+                <div class="award-desc">以及 优秀绩效管理团队</div>
+            </div>
+            <div class="award-card">
+                <div class="award-icon">⭐</div>
+                <div class="award-title">iF 设计奖</div>
+                <div class="award-desc">油气AR巡检项目获国际iF设计奖</div>
+            </div>
+            <div class="award-card">
+                <div class="award-icon">📊</div>
+                <div class="award-title">数博会优秀科技成果奖</div>
+                <div class="award-desc">大数据与人工智能领域</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 金鑫博士 | 华为云盘古视频生成&世界模型</p>
+        <p style="margin-top: 10px;">
+            
+        </p>
+    </footer>
+
 </body>
 </html>
