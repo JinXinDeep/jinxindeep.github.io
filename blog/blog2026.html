@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | 金鑫博士</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 16px;
+            --radius-sm: 8px;
+            --max-width: 800px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== Header ===== */
+        .site-header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        .header-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 3rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .hero-line {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
+            margin: 1.5rem auto 0;
+        }
+
+        /* ===== Year Section ===== */
+        .year-section {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .year-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .year-badge {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--border-light);
+            padding: 0.35rem 1rem;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+        }
+
+        .year-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ===== Post Card ===== */
+        .post-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .post-card {
+            display: flex;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .post-card:hover {
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .post-card:hover::before {
+            opacity: 1;
+        }
+
+        .post-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 70px;
+            padding-right: 1.5rem;
+            border-right: 1px solid var(--border-light);
+            margin-right: 1.5rem;
+        }
+
+        .post-date .month {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .post-date .day {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-top: 0.25rem;
+        }
+
+        .post-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            transition: color 0.2s;
+        }
+
+        .post-card:hover .post-title {
+            color: var(--primary);
+        }
+
+        .post-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 100px;
+            background: #eff6ff;
+            color: var(--primary);
+            border: 1px solid #dbeafe;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tag-survey { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+        .tag-survey:hover { background: #16a34a; color: white; border-color: #16a34a; }
+
+        .tag-embodied { background: #fefce8; color: #ca8a04; border-color: #fde047; }
+        .tag-embodied:hover { background: #ca8a04; color: white; border-color: #ca8a04; }
+
+        .tag-vla { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+        .tag-vla:hover { background: #dc2626; color: white; border-color: #dc2626; }
+
+        .post-arrow {
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .post-card:hover .post-arrow {
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        /* ===== Author Footer ===== */
+        .author-section {
+            max-width: var(--max-width);
+            margin: 4rem auto 3rem;
+            padding: 0 1.5rem;
+        }
+
+        .author-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .author-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .author-avatar {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .author-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .author-card .role {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .author-links {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .author-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .author-links a:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ===== Footer ===== */
+        .site-footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .post-card {
+                flex-direction: column;
+                padding: 1.25rem;
+            }
+
+            .post-date {
+                flex-direction: row;
+                align-items: baseline;
+                gap: 0.5rem;
+                padding-right: 0;
+                padding-bottom: 0.75rem;
+                border-right: none;
+                border-bottom: 1px solid var(--border-light);
+                margin-right: 0;
+                margin-bottom: 1rem;
+                min-width: auto;
+            }
+
+            .post-date .day {
+                font-size: 1.25rem;
+            }
+
+            .post-arrow {
+                display: none;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="https://jinxindeep.github.io/" class="logo">
+                <span>◆</span> 金鑫
+            </a>
+            <nav class="nav-links">
+                <a href="https://jinxindeep.github.io/">主页</a>
+                <a href="#">博客</a>
+                <a href="https://jinxindeep.github.io/#publications">论文</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>技术博客</h1>
+        <p>记录大模型、视频生成、世界模型与具身智能领域的前沿洞察与深度思考</p>
+        <div class="hero-line"></div>
+    </section>
+
+    <!-- 2026 Posts -->
+    <section class="year-section">
+        <div class="year-header">
+            <span class="year-badge">📅 2026</span>
+            <div class="year-line"></div>
+        </div>
+
+        <div class="post-list">
+            <a href="https://blog.csdn.net/sdlcjx/article/details/160696022" class="post-card" target="_blank" rel="noopener">
+                <div class="post-date">
+                    <span class="month">APR</span>
+                    <span class="day">04</span>
+                </div>
+                <div class="post-body">
+                    <h2 class="post-title">VLA视觉-语言-动作模型数据：机器人数据基础设施的全景解析</h2>
+                    <p class="post-excerpt">
+                        基于 Wang et al., arXiv:2604.23001 最新综述，系统梳理 VLA 研究三大支柱——数据集、基准测试与数据引擎。深入剖析真实世界与合成数据的 fidelity-cost 权衡困境，探讨从视频到数据引擎、硬件辅助采集到生成式数据引擎的技术演进路径。
+                    </p>
+                    <div class="post-meta">
+                        <span class="tag tag-survey">📊 综述</span>
+                        <span class="tag tag-embodied">🤖 具身智能</span>
+                        <span class="tag tag-vla">🔗 VLA</span>
+                        <span class="tag">⚙️ 数据引擎</span>
+                        <span class="tag">🧠 世界模型</span>
+                    </div>
+                </div>
+                <div class="post-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Author -->
+    <section class="author-section">
+        <div class="author-card">
+            <div class="author-avatar">金</div>
+            <h3>金鑫博士</h3>
+            <p class="role">华为云盘古多模态大模型首席架构师 · 视频生成与世界模型团队主管</p>
+            <div class="author-links">
+                <a href="https://jinxindeep.github.io/">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    个人主页
+                </a>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>持续更新中，敬请期待更多技术分享 🚀</p>
+    </footer>
+
+</body>
+</html>
