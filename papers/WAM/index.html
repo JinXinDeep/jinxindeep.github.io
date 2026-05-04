@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Models and World Action Models (WAM)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --text: #0f172a;
+            --text-muted: #475569;
+            --surface: #f8fafc;
+            --border: #e2e8f0;
+            --radius: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #fff;
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 72px 0 56px;
+            text-align: center;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            font-size: 1.15rem;
+            color: #94a3b8;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        .meta { font-size: 0.95rem; color: #cbd5e1; }
+        .meta a { color: #7dd3fc; }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 22px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); text-decoration: none; color: white; }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); text-decoration: none; color: white; }
+
+        .abstract-box {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-top: -32px;
+            position: relative;
+            z-index: 10;
+        }
+        .abstract-box h2 { font-size: 1.4rem; margin-bottom: 16px; }
+        .abstract-box p { color: var(--text-muted); margin-bottom: 12px; }
+        .abstract-box p.lead { color: var(--text); font-size: 1.05rem; }
+
+        section { padding: 48px 0; }
+        section.alt { background: var(--surface); }
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+        .section-desc {
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            font-size: 1rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+        .card img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            display: block;
+            background: var(--surface);
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card .tag {
+            display: inline-block;
+            background: var(--surface);
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .card p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .bibtex {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: var(--radius);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+        .bibtex pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+
+        footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 36px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 640px) {
+            header { padding: 48px 0 40px; }
+            .abstract-box { margin-top: -16px; padding: 20px; }
+            .card img { height: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="badge">Survey Paper &middot; 2026</div>
+        <h1>World Models and World Action Models (WAM)</h1>
+        <p class="subtitle">From Foundation Simulators to Embodied Action</p>
+        <div class="meta">
+            <a href="https://jinxindeep.github.io/" target="_blank">Xin Jin (金鑫)</a>
+            
+        </div>
+        <div class="actions">
+            <a href="#" class="btn btn-primary">📄 Paper (PDF)</a>
+            <a href="#" class="btn btn-secondary">💻 Code</a>
+            <a href="#" class="btn btn-secondary">📎 arXiv</a>
+        </div>
+    </div>
+</header>
+
+<section>
+    <div class="container">
+        <div class="abstract-box">
+            <h2>Abstract</h2>
+            <p class="lead">
+                World models—internal predictive representations that enable agents to simulate future states, anticipate consequences, and plan actions—have emerged as a foundational paradigm in embodied artificial intelligence. Originating from model-based reinforcement learning, this field has undergone a radical transformation with the advent of large-scale generative models, blurring the historical boundary between passive video prediction and interactive physical simulation. Concurrently, Vision-Language-Action (VLA) models have established a powerful framework for grounding high-level linguistic intent in low-level motor control. The natural convergence of these two threads—predictive world simulation and action-grounded multimodal reasoning—has given rise to <strong>Embodied World Action Models (WAMs)</strong>, representing a new frontier in which agents learn to act by imagining their futures. However, the explosive growth of methods across robotics, autonomous driving, and interactive simulation has produced a fragmented landscape that lacks systematic unification.
+            </p>
+            <p>
+                This survey presents a <strong>comprehensive and structured review</strong> of the modern world model ecosystem, encompassing <strong>200+ key papers</strong> organized into a unified taxonomy across six major pillars. 
+            </p>
+            <p>
+                Through this organization, we illuminate the evolutionary trajectory from passive pixel predictors to active, reasoning, and action-grounded simulators. We identify critical open challenges—including physical consistency, cross-embodiment generalization, safety verification, and the sim-to-real evaluation gap—and outline future directions toward cognitive world models, autonomous data collection, and standardized open ecosystems. This survey aims to serve as a definitive reference for researchers and practitioners advancing the next generation of embodied intelligence.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="alt">
+    <div class="container">
+        <h2>Paper Overview</h2>
+        <p class="section-desc">Eight sections covering the full spectrum from foundation simulation to embodied action.</p>
+        <div class="cards">
+            <div class="card">
+                <img src="assets/2026-05-03-18-56-30-image.png" alt="Taxonomy">
+                <div class="card-body">
+                    <span class="tag">Section 1</span>
+                    <h3>Introduction</h3>
+                    <p>Evolution from recurrent world models to large-scale generative simulators and the convergence of world models with VLA into WAMs.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="assets/2026-05-03-17-09-11-image.png" alt="Foundation WM">
+                <div class="card-body">
+                    <span class="tag">Section 2</span>
+                    <h3>Foundation World Models</h3>
+                    <p>General-purpose interactive simulators (Genie, Cosmos, Sora) and game-specific environments (Oasis, Matrix-Game, GameGen-X).</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="assets/2026-05-03-17-24-22-image.png" alt="VLA">
+                <div class="card-body">
+                    <span class="tag">Section 3</span>
+                    <h3>Vision-Language-Action Models</h3>
+                    <p>Foundational architectures (RT-2, π₀, OpenVLA), driving-specific VLAs, and embodied manipulation policies (Diffusion-VLA, 3D-VLA, RDT).</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="assets/2026-05-03-17-45-43-image.png" alt="WAM">
+                <div class="card-body">
+                    <span class="tag">Section 4</span>
+                    <h3>Embodied World Action Models</h3>
+                    <p>Unified video-action pretraining (DreamZero, Unified World Models), controllable simulation (RoboScape), and policy optimization (Cosmos-Policy, ThinkAct).</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="assets/2026-05-03-18-05-38-image.png" alt="Driving">
+                <div class="card-body">
+                    <span class="tag">Section 5</span>
+                    <h3>Autonomous Driving World Models</h3>
+                    <p>Driving video generation (DriveDreamer, GAIA-1), closed-loop simulation (DriveArena, Epona), planning (GenAD, DOE-1), and occupancy/BEV (OccWorld, HERMES).</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="assets/2026-05-03-18-26-54-image.png" alt="Efficiency">
+                <div class="card-body">
+                    <span class="tag">Section 6</span>
+                    <h3>Efficiency and Evaluation</h3>
+                    <p>Computational acceleration (FAST, VLA-Cache, MoLe-VLA, TinyVLA) and benchmarks (WorldScore, WorldEval, AutoEval).</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="assets/2026-05-04-14-36-17-image.png" alt="Datasets">
+                <div class="card-body">
+                    <span class="tag">Section 7</span>
+                    <h3>Datasets and Ecosystems</h3>
+                    <p>Large-scale robot learning corpora (DROID, BridgeData, LIBERO, BEHAVIOR-1K) and industry technical reports (LingBot, GR-3, AgiBot).</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="assets/2026-05-03-18-56-30-image.png" alt="Conclusion">
+                <div class="card-body">
+                    <span class="tag">Section 8</span>
+                    <h3>Conclusion & Future Directions</h3>
+                    <p>Open challenges in physical consistency, cross-embodiment generalization, safety verification, sim-to-real evaluation, and standardized open ecosystems.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Citation</h2>
+        <p class="section-desc">If you find this survey useful for your research, please consider citing:</p>
+        <div class="bibtex">
+<pre>@article{jin2026worldmodel-wam,
+  title={World Models and World Action Models (WAM): From Foundation Simulators to Embodied Action},
+  author={Jin, Xin},
+  journal={arXiv preprint},
+  year={2026},
+  url={https://jinxindeep.github.io/}
+}</pre>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>World Models and World Action Models (WAM) Survey &middot; 2026</p>
+        <p style="margin-top:6px;">
+            <a href="https://jinxindeep.github.io/" target="_blank">Author Homepage</a>  
+
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>
